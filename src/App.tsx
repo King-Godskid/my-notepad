@@ -1,10 +1,65 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { checkNote, type Note } from './actions'
 import './App.css'
+
+const NOTES_STORAGE_KEY = 'my-notepad-notes'
+
+function isNoteArray(value: unknown): value is Note[] {
+  return (
+    Array.isArray(value) &&
+    value.every(
+      (note) =>
+        typeof note === 'object' &&
+        note !== null &&
+        'title' in note &&
+        typeof note.title === 'string' &&
+        'body' in note &&
+        typeof note.body === 'string' &&
+        'tags' in note &&
+        Array.isArray(note.tags) &&
+        note.tags.every((tag: unknown) => typeof tag === 'string'),
+    )
+  )
+}
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([])
   const [error, setError] = useState('')
+  const [storageError, setStorageError] = useState('')
+  const [storageReady, setStorageReady] = useState(false)
+  const [hasChanges, setHasChanges] = useState(false)
+
+  useEffect(() => {
+    try {
+      const savedNotes = window.localStorage.getItem(NOTES_STORAGE_KEY)
+      if (savedNotes !== null) {
+        const parsedNotes: unknown = JSON.parse(savedNotes)
+        if (!isNoteArray(parsedNotes)) {
+          throw new Error('Saved notes have an invalid format.')
+        }
+        setNotes(parsedNotes)
+      }
+    } catch {
+      setStorageError(
+        'Saved notes could not be loaded. Saving a new note will replace the unreadable data.',
+      )
+    } finally {
+      setStorageReady(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!storageReady || !hasChanges) {
+      return
+    }
+
+    try {
+      window.localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes))
+      setStorageError('')
+    } catch {
+      setStorageError('Your note is shown here, but could not be saved in this browser.')
+    }
+  }, [hasChanges, notes, storageReady])
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -18,6 +73,7 @@ function App() {
     }
 
     setNotes((currentNotes) => [...currentNotes, result.note])
+    setHasChanges(true)
     setError('')
     form.reset()
   }
@@ -68,6 +124,11 @@ function App() {
           {error && (
             <p id="form-error" className="form-error" role="alert">
               {error}
+            </p>
+          )}
+          {storageError && (
+            <p className="form-error" role="alert">
+              {storageError}
             </p>
           )}
 
