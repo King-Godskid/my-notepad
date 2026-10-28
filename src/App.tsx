@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { checkNote, type Note } from './actions'
 import './App.css'
 
@@ -149,7 +150,9 @@ function App() {
             {notes.map((note, index) => (
               <li className="note-card" key={index}>
                 <h3>{note.title}</h3>
-                <p className="note-body">{note.body}</p>
+                <div className="note-body markdown-content">
+                  <ReactMarkdown>{note.body}</ReactMarkdown>
+                </div>
                 {note.tags.length > 0 && (
                   <ul className="tag-list" aria-label="Tags">
                     {note.tags.map((tag) => (
