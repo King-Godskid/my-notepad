@@ -127,6 +127,32 @@
   margin-bottom: 16px;
 }
 
+.search-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-h);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.note-search {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 11px 12px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 15px;
+}
+
+.note-search:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-bg);
+}
+
 .note-count {
   display: inline-flex;
   min-width: 24px;

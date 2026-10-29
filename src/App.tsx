@@ -25,10 +25,17 @@ function isNoteArray(value: unknown): value is Note[] {
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
   const [error, setError] = useState('')
   const [storageError, setStorageError] = useState('')
   const [storageReady, setStorageReady] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
+  const searchTerms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  const filteredNotes = notes.filter((note) => {
+    const title = note.title.toLowerCase()
+    const body = note.body.toLowerCase()
+    return searchTerms.every((term) => title.includes(term) || body.includes(term))
+  })
 
   useEffect(() => {
     try {
@@ -140,14 +147,28 @@ function App() {
       <section className="notes-list" aria-labelledby="notes-title">
         <div className="section-heading">
           <h2 id="notes-title">Your notes</h2>
-          <span className="note-count">{notes.length}</span>
+          <span className="note-count">{filteredNotes.length}</span>
         </div>
+
+        <label className="search-label" htmlFor="note-search">
+          Search notes
+        </label>
+        <input
+          id="note-search"
+          className="note-search"
+          type="search"
+          placeholder="Search titles and notes"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+        />
 
         {notes.length === 0 ? (
           <p className="empty-state">Your saved notes will appear here.</p>
+        ) : filteredNotes.length === 0 ? (
+          <p className="empty-state">No notes match</p>
         ) : (
           <ul>
-            {notes.map((note, index) => (
+            {filteredNotes.map((note, index) => (
               <li className="note-card" key={index}>
                 <h3>{note.title}</h3>
                 <div className="note-body markdown-content">
