@@ -119,11 +119,63 @@
   box-shadow: 0 0 12px rgba(58, 42, 75, 0.09);
 }
 
-.note-composer textarea {
-  min-height: 148px;
+.note-editor-frame {
+  min-width: 0;
+  min-height: 204px;
+  overflow: auto;
   resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--field-bg);
+  box-shadow: 0 0 12px rgba(58, 42, 75, 0.09);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.note-editor-frame:focus-within {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent-bg);
+  box-shadow: 0 0 16px var(--accent-bg);
+}
+
+.note-editor {
+  min-height: 148px;
+  padding: 11px 12px;
+  outline: none;
   font-family: var(--sans);
+  font-size: 16px;
   line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.note-editor[data-empty='true']::before {
+  color: var(--text);
+  content: attr(aria-placeholder);
+  pointer-events: none;
+}
+
+.note-editor h1,
+.note-editor h2,
+.note-editor h3,
+.note-editor h4,
+.note-editor h5,
+.note-editor h6 {
+  min-width: 0;
+  margin-block: 0.6em 0.35em;
+  color: var(--text-h);
+  font-family: var(--heading);
+  font-size: 1.35em;
+  font-weight: 700;
+  letter-spacing: normal;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.note-editor p {
+  margin-block: 0.5em;
 }
 
 .note-composer input:focus,
@@ -144,7 +196,7 @@
   font-size: 14px;
 }
 
-.note-composer button {
+.note-composer form > button[type='submit'] {
   align-self: flex-start;
   margin-top: 22px;
   border: 0;
@@ -160,14 +212,66 @@
   box-shadow: 0 0 16px rgba(52, 45, 67, 0.2);
 }
 
-.note-composer button:hover {
+.note-composer form > button[type='submit']:hover {
   filter: brightness(1.12);
   transform: translateY(-1px);
 }
 
-.note-composer button:focus-visible {
+.note-composer form > button[type='submit']:focus-visible {
   outline: 3px solid var(--accent-border);
   outline-offset: 3px;
+}
+
+.formatting-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.formatting-toolbar button {
+  display: inline-flex;
+  width: 42px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 0;
+  background: var(--search-bg);
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(58, 42, 75, 0.06);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.formatting-toolbar button:hover {
+  transform: translateY(-2px);
+  border-color: var(--hover-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.formatting-toolbar button.is-active {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-bg);
+}
+
+.formatting-toolbar button:focus-visible {
+  outline: 3px solid var(--accent-border);
+  outline-offset: 2px;
+}
+
+.formatting-toolbar button svg {
+  display: block;
 }
 
 .notes-list {
@@ -335,10 +439,13 @@
   font-family: var(--heading);
 }
 
-.markdown-content p,
+.markdown-content p {
+  margin-block: 1em;
+}
+
 .markdown-content ul,
 .markdown-content ol {
-  margin-block: 0.75em;
+  margin-block: 0.85em;
 }
 
 .markdown-content ul,
@@ -390,13 +497,16 @@
 @media (prefers-reduced-motion: reduce) {
   .note-card,
   .note-composer,
-  .note-search {
+  .note-editor-frame,
+  .note-search,
+  .formatting-toolbar button {
     transition: none;
   }
 
   .note-card:hover,
   .note-composer:hover,
-  .note-composer button:hover {
+  .formatting-toolbar button:hover,
+  .note-composer form > button[type='submit']:hover {
     transform: none;
   }
 }
