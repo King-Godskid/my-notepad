@@ -1,25 +1,49 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: #625e6b;
+  --text-h: #342d43;
+  --bg: rgba(255, 253, 255, 0.96);
+  --composer-bg: rgba(244, 237, 250, 0.96);
+  --search-bg: rgba(250, 246, 253, 0.98);
+  --field-bg: rgba(255, 253, 255, 0.82);
+  --page-bg: #f2eff6;
+  --wash-one: rgba(191, 157, 213, 0.2);
+  --wash-two: rgba(233, 185, 157, 0.18);
+  --border: #e0d9e8;
+  --code-bg: #ebe6f0;
+  --accent: #795399;
+  --accent-bg: rgba(121, 83, 153, 0.12);
+  --accent-border: rgba(121, 83, 153, 0.48);
+  --hover-border: rgba(121, 83, 153, 0.72);
+  --hover-shadow:
+    0 0 38px rgba(90, 54, 123, 0.27),
+    0 0 12px rgba(90, 54, 123, 0.16);
+  --social-bg: rgba(235, 230, 240, 0.7);
+  --danger: #a74b59;
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    0 0 30px rgba(58, 42, 75, 0.12),
+    0 0 8px rgba(58, 42, 75, 0.07);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Avenir Next', 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Baskerville', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
-  background: var(--bg);
+  background-color: var(--page-bg);
+  background-image:
+    radial-gradient(ellipse at 8% 6%, var(--wash-one), transparent 34rem),
+    radial-gradient(ellipse at 96% 28%, var(--wash-two), transparent 40rem),
+    repeating-linear-gradient(
+      135deg,
+      transparent 0,
+      transparent 10px,
+      rgba(80, 75, 58, 0.018) 10px,
+      rgba(80, 75, 58, 0.018) 11px
+    ),
+    linear-gradient(135deg, var(--page-bg), var(--page-bg));
+  background-attachment: fixed;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -32,17 +56,29 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
+    --text: #c7c0d0;
+    --text-h: #f4eff9;
+    --bg: rgba(43, 38, 51, 0.96);
+    --composer-bg: rgba(58, 48, 69, 0.98);
+    --search-bg: rgba(51, 45, 61, 0.98);
+    --field-bg: rgba(43, 38, 51, 0.86);
+    --page-bg: #24212c;
+    --wash-one: rgba(139, 102, 166, 0.2);
+    --wash-two: rgba(174, 119, 96, 0.15);
+    --border: #4a4355;
+    --code-bg: #36313f;
+    --accent: #c6a0df;
+    --accent-bg: rgba(198, 160, 223, 0.15);
+    --accent-border: rgba(198, 160, 223, 0.55);
+    --hover-border: rgba(198, 160, 223, 0.8);
+    --hover-shadow:
+      0 0 38px rgba(174, 129, 207, 0.25),
+      0 0 12px rgba(174, 129, 207, 0.14);
+    --social-bg: rgba(54, 49, 63, 0.75);
+    --danger: #e49aa2;
     --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+      0 0 30px rgba(0, 0, 0, 0.32),
+      0 0 8px rgba(0, 0, 0, 0.2);
   }
 
   #social .button-icon {
@@ -64,7 +100,7 @@ body {
 h1,
 h2 {
   font-family: var(--heading);
-  font-weight: 500;
+  font-weight: 700;
   color: var(--text-h);
 }
 
