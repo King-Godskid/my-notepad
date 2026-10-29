@@ -1,7 +1,7 @@
 .notes-app {
-  width: min(100% - 40px, 760px);
+  width: min(calc(100% - clamp(24px, 7vw, 64px)), 760px);
   margin: 0 auto;
-  padding: 64px 0 96px;
+  padding: clamp(36px, 7vw, 64px) 0 clamp(56px, 10vw, 96px);
 }
 
 .page-header {
@@ -35,7 +35,7 @@
 }
 
 .note-composer {
-  padding: 28px;
+  padding: clamp(18px, 4vw, 28px);
   box-shadow: var(--shadow);
 }
 
@@ -61,6 +61,7 @@
 .note-composer input,
 .note-composer textarea {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 7px;
@@ -68,7 +69,7 @@
   background: var(--bg);
   color: var(--text-h);
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .note-composer textarea {
@@ -98,6 +99,7 @@
   margin-top: 22px;
   border: 0;
   border-radius: 7px;
+  min-height: 44px;
   padding: 11px 18px;
   background: var(--accent);
   color: white;
@@ -137,6 +139,7 @@
 
 .note-search {
   width: 100%;
+  min-width: 0;
   box-sizing: border-box;
   margin-bottom: 16px;
   border: 1px solid var(--border);
@@ -145,7 +148,7 @@
   background: var(--bg);
   color: var(--text-h);
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .note-search:focus {
@@ -169,7 +172,7 @@
 .empty-state {
   border: 1px dashed var(--border);
   border-radius: 10px;
-  padding: 22px;
+  padding: clamp(16px, 4vw, 22px);
   text-align: center;
 }
 
@@ -182,13 +185,15 @@
 }
 
 .note-card {
-  padding: 20px;
+  padding: clamp(16px, 4vw, 20px);
 }
 
 .note-card h3 {
+  min-width: 0;
   margin: 0;
   color: var(--text-h);
   font-size: 18px;
+  overflow-wrap: anywhere;
 }
 
 .note-card-heading {
@@ -202,6 +207,7 @@
   flex: 0 0 auto;
   border: 1px solid var(--border);
   border-radius: 7px;
+  min-height: 40px;
   padding: 6px 10px;
   background: var(--bg);
   color: #b42318;
@@ -221,6 +227,7 @@
 }
 
 .note-body {
+  min-width: 0;
   margin-top: 10px;
   overflow-wrap: anywhere;
 }
@@ -261,6 +268,23 @@
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+.markdown-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.markdown-content table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .tag-list {
@@ -283,11 +307,24 @@
 
 @media (max-width: 520px) {
   .notes-app {
-    width: min(100% - 28px, 760px);
-    padding-top: 36px;
+    padding-top: 32px;
   }
 
   .note-composer {
-    padding: 20px;
+    padding: clamp(16px, 5vw, 20px);
+  }
+
+  .delete-note-button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .notes-app {
+    width: calc(100% - 24px);
+  }
+
+  .note-card-heading {
+    gap: 10px;
   }
 }
