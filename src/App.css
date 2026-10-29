@@ -324,6 +324,48 @@
   box-shadow: 0 0 16px var(--accent-bg);
 }
 
+.tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+.tag-filter-button,
+.note-tag-button {
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.tag-filter-button {
+  min-height: 40px;
+}
+
+.tag-filter-button:hover,
+.note-tag-button:hover,
+.tag-filter-button.is-active {
+  border-color: var(--text-h);
+  background: var(--text-h);
+  color: var(--bg);
+}
+
+.tag-filter-button:focus-visible,
+.note-tag-button:focus-visible {
+  outline: 3px solid var(--accent-border);
+  outline-offset: 2px;
+}
+
 .note-count {
   display: inline-flex;
   min-width: 24px;
@@ -485,13 +527,9 @@
   list-style: none;
 }
 
-.tag-list li {
-  border-radius: 999px;
-  padding: 4px 10px;
-  background: var(--accent-bg);
-  color: var(--accent);
+.note-tag-button {
+  padding: 5px 10px;
   font-size: 12px;
-  font-weight: 650;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -499,6 +537,8 @@
   .note-composer,
   .note-editor-frame,
   .note-search,
+  .tag-filter-button,
+  .note-tag-button,
   .formatting-toolbar button {
     transition: none;
   }

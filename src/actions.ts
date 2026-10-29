@@ -9,14 +9,16 @@ export type CheckNoteResult =
   | { ok: true; note: Note }
 
 export function checkNote(formData: FormData): CheckNoteResult {
-  const title = formData.get('title')
-  const body = formData.get('body')
+  const rawTitle = formData.get('title')
+  const rawBody = formData.get('body')
+  const title = typeof rawTitle === 'string' ? rawTitle.trim() : ''
+  const body = typeof rawBody === 'string' ? rawBody.trim() : ''
 
-  if (typeof title !== 'string' || title.trim() === '') {
+  if (title === '') {
     return { ok: false, error: 'Please enter a title.' }
   }
 
-  if (typeof body !== 'string' || body.trim() === '') {
+  if (body === '') {
     return { ok: false, error: 'Please enter a note body.' }
   }
 

@@ -12,6 +12,16 @@ import { checkNote, type Note } from './actions'
 import './App.css'
 
 const NOTES_STORAGE_KEY = 'my-notepad-notes'
+const SUGGESTED_TAGS = [
+  'work',
+  'personal',
+  'ideas',
+  'church',
+  'home',
+  'someday',
+  'study',
+  'travel',
+]
 
 type FormatAction =
   | 'bold'
@@ -182,19 +192,40 @@ function App() {
   })
   const editorRef = useRef<HTMLDivElement>(null)
   const markdownBodyRef = useRef<HTMLTextAreaElement>(null)
+  const tagsInputRef = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [storageError, setStorageError] = useState('')
   const [storageReady, setStorageReady] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const searchTerms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  const allTags = [...new Set(notes.flatMap((note) => note.tags))]
   const filteredNotes = notes
     .map((note, index) => ({ note, index }))
     .filter(({ note }) => {
       const title = note.title.toLowerCase()
       const body = getNoteSearchText(note.body)
-      return searchTerms.every((term) => title.includes(term) || body.includes(term))
+      return (
+        (!selectedTag || note.tags.includes(selectedTag)) &&
+        searchTerms.every((term) => title.includes(term) || body.includes(term))
+      )
     })
+
+  function addSuggestedTag(tag: string) {
+    const input = tagsInputRef.current
+    if (!input) {
+      return
+    }
+
+    const tags = input.value.split(',').map((value) => value.trim()).filter(Boolean)
+    if (tags.some((value) => value.toLowerCase() === tag)) {
+      return
+    }
+
+    input.value = [...tags, tag].join(', ')
+    input.focus()
+  }
 
   function syncEditorMarkdown() {
     if (!editorRef.current || !markdownBodyRef.current) {
@@ -559,13 +590,27 @@ function App() {
           <input
             id="tags"
             name="tags"
+            ref={tagsInputRef}
             type="text"
             placeholder="work, ideas, someday"
             aria-describedby="tags-hint"
           />
           <p id="tags-hint" className="field-hint">
-            Separate tags with commas.
+            Choose a suggestion or enter any tags separated by commas.
           </p>
+          <div className="tag-filters suggested-tags" role="group" aria-label="Suggested tags">
+            {SUGGESTED_TAGS.map((tag) => (
+              <button
+                className="tag-filter-button"
+                key={tag}
+                type="button"
+                aria-label={`Add ${tag} tag`}
+                onClick={() => addSuggestedTag(tag)}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
 
           {error && (
             <p id="form-error" className="form-error" role="alert">
@@ -600,6 +645,28 @@ function App() {
           onChange={(event) => setSearchQuery(event.target.value)}
         />
 
+        <div className="tag-filters" role="group" aria-label="Filter notes by tag">
+          <button
+            className={`tag-filter-button${selectedTag === null ? ' is-active' : ''}`}
+            type="button"
+            aria-pressed={selectedTag === null}
+            onClick={() => setSelectedTag(null)}
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              className={`tag-filter-button${selectedTag === tag ? ' is-active' : ''}`}
+              key={tag}
+              type="button"
+              aria-pressed={selectedTag === tag}
+              onClick={() => setSelectedTag(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+
         {notes.length === 0 ? (
           <p className="empty-state">Your saved notes will appear here.</p>
         ) : filteredNotes.length === 0 ? (
@@ -629,7 +696,16 @@ function App() {
                 {note.tags.length > 0 && (
                   <ul className="tag-list" aria-label="Tags">
                     {note.tags.map((tag) => (
-                      <li key={tag}>{tag}</li>
+                      <li key={tag}>
+                        <button
+                          className="note-tag-button"
+                          type="button"
+                          aria-label={`Show notes tagged ${tag}`}
+                          onClick={() => setSelectedTag(tag)}
+                        >
+                          {tag}
+                        </button>
+                      </li>
                     ))}
                   </ul>
                 )}
