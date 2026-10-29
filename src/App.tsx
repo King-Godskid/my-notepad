@@ -31,11 +31,13 @@ function App() {
   const [storageReady, setStorageReady] = useState(false)
   const [hasChanges, setHasChanges] = useState(false)
   const searchTerms = searchQuery.trim().toLowerCase().split(/\s+/).filter(Boolean)
-  const filteredNotes = notes.filter((note) => {
-    const title = note.title.toLowerCase()
-    const body = note.body.toLowerCase()
-    return searchTerms.every((term) => title.includes(term) || body.includes(term))
-  })
+  const filteredNotes = notes
+    .map((note, index) => ({ note, index }))
+    .filter(({ note }) => {
+      const title = note.title.toLowerCase()
+      const body = note.body.toLowerCase()
+      return searchTerms.every((term) => title.includes(term) || body.includes(term))
+    })
 
   useEffect(() => {
     try {
@@ -65,7 +67,7 @@ function App() {
       window.localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes))
       setStorageError('')
     } catch {
-      setStorageError('Your note is shown here, but could not be saved in this browser.')
+      setStorageError('Your changes are shown here, but could not be saved in this browser.')
     }
   }, [hasChanges, notes, storageReady])
 
@@ -84,6 +86,13 @@ function App() {
     setHasChanges(true)
     setError('')
     form.reset()
+  }
+
+  function handleDelete(index: number) {
+    setNotes((currentNotes) =>
+      currentNotes.filter((_, currentIndex) => currentIndex !== index),
+    )
+    setHasChanges(true)
   }
 
   return (
@@ -168,9 +177,19 @@ function App() {
           <p className="empty-state">No notes match</p>
         ) : (
           <ul>
-            {filteredNotes.map((note, index) => (
+            {filteredNotes.map(({ note, index }) => (
               <li className="note-card" key={index}>
-                <h3>{note.title}</h3>
+                <div className="note-card-heading">
+                  <h3>{note.title}</h3>
+                  <button
+                    className="delete-note-button"
+                    type="button"
+                    aria-label={`Delete ${note.title}`}
+                    onClick={() => handleDelete(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
                 <div className="note-body markdown-content">
                   <ReactMarkdown>{note.body}</ReactMarkdown>
                 </div>

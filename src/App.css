@@ -191,6 +191,35 @@
   font-size: 18px;
 }
 
+.note-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.delete-note-button {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 10px;
+  background: var(--bg);
+  color: #b42318;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.delete-note-button:hover {
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.delete-note-button:focus-visible {
+  outline: 3px solid var(--accent-border);
+  outline-offset: 3px;
+}
+
 .note-body {
   margin-top: 10px;
   overflow-wrap: anywhere;
